@@ -16,18 +16,12 @@ public class Benchmarks
 {
     private int[] data = [];
     private byte[] bytes = [];
-     public float[] A = [];
-    public float[] B = [];
-    private readonly byte[] key = new byte[16];
+    public double[] A = [];
+    public double[] B = [];
     private readonly ulong word = (ulong)Random.Shared.NextInt64();
 
     [Params(128, 262144, 1048576)]
     public int N;
-
-    public Benchmarks()
-    {
-        Random.Shared.NextBytes(key);
-    }
 
     [GlobalSetup]
     public void Setup()
@@ -376,12 +370,12 @@ public class Benchmarks
     {
         double acc = 0;
 
-        ref float ptrA = ref MemoryMarshal.GetReference<float>(A);
-        ref float ptrB = ref MemoryMarshal.GetReference<float>(B);
+        ref double ptrA = ref MemoryMarshal.GetReference<double>(A);
+        ref double ptrB = ref MemoryMarshal.GetReference<double>(B);
 
-        ref float endMinusOne = ref Unsafe.Add(ref ptrA, A.Length - Vector256<float>.Count);
+        ref double endMinusOne = ref Unsafe.Add(ref ptrA, A.Length - Vector256<double>.Count);
 
-        Vector256<float> a, b;
+        Vector256<double> a, b;
 
         do
         {
@@ -390,8 +384,8 @@ public class Benchmarks
 
             acc += Vector256.Dot(a, b);
 
-            ptrA = ref Unsafe.Add(ref ptrA, Vector256<float>.Count);
-            ptrB = ref Unsafe.Add(ref ptrB, Vector256<float>.Count);
+            ptrA = ref Unsafe.Add(ref ptrA, Vector256<double>.Count);
+            ptrB = ref Unsafe.Add(ref ptrB, Vector256<double>.Count);
         }
         while (Unsafe.IsAddressLessThan(ref ptrA, ref endMinusOne));
 
@@ -406,14 +400,14 @@ public class Benchmarks
     [Benchmark]
     public unsafe double DotVector256()
     {
-        var acc = Vector256<float>.Zero;
+        var acc = Vector256<double>.Zero;
 
-        ref float ptrA = ref MemoryMarshal.GetReference<float>(A);
-        ref float ptrB = ref MemoryMarshal.GetReference<float>(B);
+        ref double ptrA = ref MemoryMarshal.GetReference<double>(A);
+        ref double ptrB = ref MemoryMarshal.GetReference<double>(B);
 
-        ref float endMinusOne = ref Unsafe.Add(ref ptrA, A.Length - Vector256<float>.Count);
+        ref double endMinusOne = ref Unsafe.Add(ref ptrA, A.Length - Vector256<double>.Count);
 
-        Vector256<float> a, b;
+        Vector256<double> a, b;
 
         do
         {
@@ -422,8 +416,8 @@ public class Benchmarks
 
             acc += a * b;
 
-            ptrA = ref Unsafe.Add(ref ptrA, Vector256<float>.Count);
-            ptrB = ref Unsafe.Add(ref ptrB, Vector256<float>.Count);
+            ptrA = ref Unsafe.Add(ref ptrA, Vector256<double>.Count);
+            ptrB = ref Unsafe.Add(ref ptrB, Vector256<double>.Count);
         }
         while (Unsafe.IsAddressLessThan(ref ptrA, ref endMinusOne));
 
@@ -438,14 +432,14 @@ public class Benchmarks
     [Benchmark]
     public unsafe double DotVector128()
     {
-        var acc = Vector128<float>.Zero;
+        var acc = Vector128<double>.Zero;
 
-        ref float ptrA = ref MemoryMarshal.GetReference<float>(A);
-        ref float ptrB = ref MemoryMarshal.GetReference<float>(B);
+        ref double ptrA = ref MemoryMarshal.GetReference<double>(A);
+        ref double ptrB = ref MemoryMarshal.GetReference<double>(B);
 
-        ref float endMinusOne = ref Unsafe.Add(ref ptrA, A.Length - Vector128<float>.Count);
+        ref double endMinusOne = ref Unsafe.Add(ref ptrA, A.Length - Vector128<double>.Count);
 
-        Vector128<float> a, b;
+        Vector128<double> a, b;
 
         do
         {
@@ -454,8 +448,8 @@ public class Benchmarks
 
             acc += a * b;
 
-            ptrA = ref Unsafe.Add(ref ptrA, Vector128<float>.Count);
-            ptrB = ref Unsafe.Add(ref ptrB, Vector128<float>.Count);
+            ptrA = ref Unsafe.Add(ref ptrA, Vector128<double>.Count);
+            ptrB = ref Unsafe.Add(ref ptrB, Vector128<double>.Count);
         }
         while (Unsafe.IsAddressLessThan(ref ptrA, ref endMinusOne));
 
