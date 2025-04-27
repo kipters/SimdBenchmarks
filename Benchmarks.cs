@@ -18,7 +18,8 @@ public class Benchmarks
     private byte[] bytes = [];
     public double[] A = [];
     public double[] B = [];
-    private readonly ulong word = (ulong)Random.Shared.NextInt64();
+    private static readonly Random Rnd = new(42);
+    private readonly ulong word = (ulong)Rnd.NextInt64();
 
     [Params(128, 262144, 1048576)]
     public int N;
@@ -27,13 +28,13 @@ public class Benchmarks
     public void Setup()
     {
         bytes = new byte[N];
-        Random.Shared.NextBytes(bytes);
+        Rnd.NextBytes(bytes);
 
-        data = [.. Enumerable.Range(0, N).Select(_ => Random.Shared.Next() & 0x000000FF)];
+        data = [.. Enumerable.Range(0, N).Select(_ => Rnd.Next() & 0x000000FF)];
 
-        A = [.. Enumerable.Range(0, N).Select(_ => 2f * Random.Shared.NextSingle() - 1f)];
+        A = [.. Enumerable.Range(0, N).Select(_ => 2f * Rnd.NextSingle() - 1f)];
 
-        B = [.. Enumerable.Range(0, N).Select(_ => 2f * Random.Shared.NextSingle() - 1f)];
+        B = [.. Enumerable.Range(0, N).Select(_ => 2f * Rnd.NextSingle() - 1f)];
     }
 
     public class Config : ManualConfig
