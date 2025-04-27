@@ -35,7 +35,7 @@ public class Benchmarks
         bytes = new byte[N];
         Random.Shared.NextBytes(bytes);
 
-        data = [.. Enumerable.Range(0, N).Select(_ => Random.Shared.Next() & 0x0000FFFF)];
+        data = [.. Enumerable.Range(0, N).Select(_ => Random.Shared.Next() & 0x000000FF)];
 
         A = [.. Enumerable.Range(0, N).Select(_ => 2f * Random.Shared.NextSingle() - 1f)];
 

@@ -4,7 +4,12 @@ using BenchmarkDotNet.Running;
 using SimdBenchmarks;
 
 #if DEBUG
-var benchmarks = new Benchmarks { N = 128 };
+var n = args switch
+{
+    [ string arg ] when int.TryParse(arg, out var p) => p,
+    _ => 128
+};
+var benchmarks = new Benchmarks { N = n };
 benchmarks.Setup();
 var archFilter = RuntimeInformation.ProcessArchitecture == Architecture.X64 ? "Arm" : "Intel";
 var methods = typeof(Benchmarks).GetMethods()
